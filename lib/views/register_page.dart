@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:forum_app/views/register_page.dart';
+import 'package:forum_app/views/login_page.dart';
 import 'package:forum_app/views/widget/input_widget.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmationController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
@@ -26,9 +29,25 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Login Page", style: GoogleFonts.poppins(fontSize: size * 0.080)),
+              Text("Register Page", style: GoogleFonts.poppins(fontSize: size * 0.080)),
               const SizedBox(
                 height: 30,
+              ),
+              InputWidget(
+                hintText: 'Name',
+                obscureText: false,
+                controller: _nameController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              InputWidget(
+                hintText: 'Username',
+                obscureText: false,
+                controller: _usernameController,
+              ),
+              const SizedBox(
+                height: 20,
               ),
               InputWidget(
                 hintText: 'Email',
@@ -44,6 +63,14 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _passwordController,
               ),
               const SizedBox(
+                height: 20,
+              ),
+              InputWidget(
+                hintText: 'Password Confirmation',
+                obscureText: true,
+                controller: _passwordConfirmationController,
+              ),
+              const SizedBox(
                 height: 30,
               ),
               ElevatedButton(
@@ -56,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ),
                 onPressed: () {},
-                child: Text('Login',
+                child: Text('Register',
                   style: GoogleFonts.poppins(
                     fontSize: size * 0.040,
                     textStyle: const TextStyle(
@@ -69,14 +96,14 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
               TextButton(
-                onPressed: (){
-                  Get.to(() => const RegisterPage());
-                },
-                child: Text('Register',
-                  style: GoogleFonts.poppins(
-                    fontSize: size * 0.040
-                  ),
-                )
+                  onPressed: (){
+                    Get.to(() => const LoginPage());
+                  },
+                  child: Text('Login',
+                    style: GoogleFonts.poppins(
+                        fontSize: size * 0.040
+                    ),
+                  )
               )
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forum_app/controllers/authentication.dart';
 import 'package:forum_app/views/login_page.dart';
 import 'package:forum_app/views/widget/input_widget.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmationController = TextEditingController();
+  final AuthenticationController _authenticationController = Get.put(AuthenticationController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
@@ -73,24 +75,37 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  elevation: 0,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 50,
-                    vertical: 15
-                  )
-                ),
-                onPressed: () {},
-                child: Text('Register',
-                  style: GoogleFonts.poppins(
-                    fontSize: size * 0.040,
-                    textStyle: const TextStyle(
-                      color: Colors.white
+              Obx(() {
+                return _authenticationController.isLoading.value
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 50,
+                        vertical: 15
+                      )
+                    ),
+                    onPressed: () async {
+                      await _authenticationController.register(
+                        name: _nameController.text.trim(),
+                        username: _usernameController.text.trim(),
+                        email: _emailController.text.trim(),
+                        password: _passwordController.text.trim(),
+                        passwordConfirmation: _passwordConfirmationController.text.trim()
+                      );
+                    },
+                    child: Text('Register',
+                      style: GoogleFonts.poppins(
+                        fontSize: size * 0.040,
+                        textStyle: const TextStyle(
+                          color: Colors.white
+                        )
+                      ),
                     )
-                  ),
-                )
+                  );
+                }
               ),
               const SizedBox(
                 height: 20,

@@ -17,21 +17,21 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmationController = TextEditingController();
-  final AuthenticationController _authenticationController = Get.put(AuthenticationController());
+  final TextEditingController _passwordConfirmationController =
+      TextEditingController();
+  final AuthenticationController _authenticationController =
+      Get.put(AuthenticationController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: ListView(
             children: [
-              Text("Register Page", style: GoogleFonts.poppins(fontSize: size * 0.080)),
+              Text("Register Page",
+                  style: GoogleFonts.poppins(fontSize: size * 0.080)),
               const SizedBox(
                 height: 30,
               ),
@@ -75,51 +75,47 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 30,
               ),
-              Obx(() {
-                return _authenticationController.isLoading.value
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                    style: ElevatedButton.styleFrom(
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 15
-                      )
-                    ),
-                    onPressed: () async {
-                      await _authenticationController.register(
+                          horizontal: 50, vertical: 15)),
+                  onPressed: () async {
+                    await _authenticationController.register(
                         name: _nameController.text.trim(),
                         username: _usernameController.text.trim(),
                         email: _emailController.text.trim(),
                         password: _passwordController.text.trim(),
-                        passwordConfirmation: _passwordConfirmationController.text.trim()
-                      );
-                    },
-                    child: Text('Register',
-                      style: GoogleFonts.poppins(
-                        fontSize: size * 0.040,
-                        textStyle: const TextStyle(
-                          color: Colors.white
-                        )
-                      ),
-                    )
-                  );
-                }
-              ),
+                        passwordConfirmation:
+                            _passwordConfirmationController.text.trim());
+                  },
+                  child: Obx(() {
+                    return _authenticationController.isLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
+                          )
+                        : Text(
+                            'Register',
+                            style: GoogleFonts.poppins(
+                                fontSize: size * 0.040,
+                                textStyle:
+                                    const TextStyle(color: Colors.white)),
+                          );
+                  })),
               const SizedBox(
                 height: 20,
               ),
               TextButton(
-                  onPressed: (){
+                  onPressed: () {
                     Get.to(() => const LoginPage());
                   },
-                  child: Text('Login',
-                    style: GoogleFonts.poppins(
-                        fontSize: size * 0.040
-                    ),
-                  )
-              )
+                  child: Text(
+                    'Login',
+                    style: GoogleFonts.poppins(fontSize: size * 0.040),
+                  ))
             ],
           ),
         ),

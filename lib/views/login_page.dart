@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forum_app/controllers/authentication.dart';
 import 'package:forum_app/views/register_page.dart';
 import 'package:forum_app/views/widget/input_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,8 +13,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthenticationController _authenticationController = Get.put(AuthenticationController());
+
+  String? _usernameError;
+  String? _passwordError;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
@@ -31,9 +37,10 @@ class _LoginPageState extends State<LoginPage> {
                 height: 30,
               ),
               InputWidget(
-                hintText: 'Email',
+                hintText: 'Username',
                 obscureText: false,
-                controller: _emailController,
+                controller: _usernameController,
+                errorText: _usernameError,
               ),
               const SizedBox(
                 height: 20,
@@ -42,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Password',
                 obscureText: true,
                 controller: _passwordController,
+                errorText: _passwordError,
               ),
               const SizedBox(
                 height: 30,
@@ -55,14 +63,30 @@ class _LoginPageState extends State<LoginPage> {
                     vertical: 15
                   )
                 ),
-                onPressed: () {},
-                child: Text('Login',
-                  style: GoogleFonts.poppins(
-                    fontSize: size * 0.040,
-                    textStyle: const TextStyle(
-                      color: Colors.white
-                    )
-                  ),
+                onPressed: () async {
+                  Map<String, List<String>>? errors = await _authenticationController.login(
+                    username: _usernameController.text.trim(),
+                    password: _passwordController.text.trim()
+                  );
+
+                  setState(() {
+                    _usernameError = errors?['username']?.join(', ');
+                    _passwordError = errors?['password']?.join(', ');
+                  });
+                },
+                child: Obx(() {
+                    return _authenticationController.isLoading.value
+                    ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    ) : Text('Login',
+                      style: GoogleFonts.poppins(
+                        fontSize: size * 0.040,
+                        textStyle: const TextStyle(
+                          color: Colors.white
+                        )
+                      ),
+                    );
+                  }
                 )
               ),
               const SizedBox(

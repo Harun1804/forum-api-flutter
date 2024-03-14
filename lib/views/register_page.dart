@@ -35,7 +35,8 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Register Page",
                   style: GoogleFonts.poppins(fontSize: size * 0.080)),

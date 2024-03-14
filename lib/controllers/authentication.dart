@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:forum_app/constants/constants.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -37,9 +36,16 @@ class AuthenticationController extends GetxController
       if (response.statusCode == 201){
         isLoading.value = false;
         print(jsonDecode(response.body));
-      }else{
+      }else if(response.statusCode == 422) {
         isLoading.value = false;
-        print(jsonDecode(response.body));
+        Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        Map<String, List<String>> result = {};
+        Map<String, dynamic> errors = jsonResponse['result'];
+        errors.forEach((key, value) {
+          result[key] = List<String>.from(value);
+        });
+
+        return result;
       }
     } catch (e) {
       isLoading.value = false;

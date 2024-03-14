@@ -6,12 +6,14 @@ class InputWidget extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.controller,
-    required this.obscureText
+    required this.obscureText,
+    this.errorText,
   });
 
   final String hintText;
   final TextEditingController controller;
   final bool obscureText;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,8 @@ class InputWidget extends StatelessWidget {
             hintStyle: GoogleFonts.poppins(),
             contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20
-            )
+            ),
+          errorText: errorText
         ),
       ),
     );

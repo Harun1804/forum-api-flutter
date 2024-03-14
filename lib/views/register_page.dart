@@ -21,6 +21,13 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final AuthenticationController _authenticationController =
       Get.put(AuthenticationController());
+
+  String? _nameError;
+  String? _usernameError;
+  String? _emailError;
+  String? _passwordError;
+  String? _passwordConfirmationError;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
@@ -39,6 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Name',
                 obscureText: false,
                 controller: _nameController,
+                errorText: _nameError,
               ),
               const SizedBox(
                 height: 20,
@@ -47,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Username',
                 obscureText: false,
                 controller: _usernameController,
+                errorText: _usernameError,
               ),
               const SizedBox(
                 height: 20,
@@ -55,6 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Email',
                 obscureText: false,
                 controller: _emailController,
+                errorText: _emailError,
               ),
               const SizedBox(
                 height: 20,
@@ -63,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Password',
                 obscureText: true,
                 controller: _passwordController,
+                errorText: _passwordError,
               ),
               const SizedBox(
                 height: 20,
@@ -71,6 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Password Confirmation',
                 obscureText: true,
                 controller: _passwordConfirmationController,
+                errorText: _passwordConfirmationError,
               ),
               const SizedBox(
                 height: 30,
@@ -82,13 +94,21 @@ class _RegisterPageState extends State<RegisterPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 50, vertical: 15)),
                   onPressed: () async {
-                    await _authenticationController.register(
+                    Map<String, List<String>>? errors = await _authenticationController.register(
                         name: _nameController.text.trim(),
                         username: _usernameController.text.trim(),
                         email: _emailController.text.trim(),
                         password: _passwordController.text.trim(),
                         passwordConfirmation:
                             _passwordConfirmationController.text.trim());
+
+                    setState(() {
+                      _nameError = errors?['name']?.join(', ');
+                      _usernameError = errors?['username']?.join(', ');
+                      _emailError = errors?['email']?.join(', ');
+                      _passwordError = errors?['password']?.join(', ');
+                      _passwordConfirmationError = errors?['password_confirmation']?.join(', ');
+                    });
                   },
                   child: Obx(() {
                     return _authenticationController.isLoading.value

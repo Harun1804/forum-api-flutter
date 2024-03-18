@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forum_app/controllers/authentication.dart';
+import 'package:forum_app/controllers/authentication_controller.dart';
 import 'package:forum_app/views/register_page.dart';
 import 'package:forum_app/views/widget/input_widget.dart';
 import 'package:google_fonts/google_fonts.dart';

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:forum_app/constants/constants.dart';
 import 'package:forum_app/views/home_page.dart';

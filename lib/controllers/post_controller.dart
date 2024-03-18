@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ class PostController extends GetxController
 
   Future getAllPosts() async {
     try {
+      posts.value.clear();
       isLoading.value = true;
       var response = await http.get(
         Uri.parse("$url/feeds"),
@@ -35,6 +37,48 @@ class PostController extends GetxController
       } else {
         isLoading.value = false;
         print(jsonDecode(response.body));
+      }
+    } catch (e) {
+      isLoading.value = false;
+      print(e.toString());
+    }
+  }
+
+  Future createPost({required String content}) async {
+    var data = {
+      'content': content
+    };
+
+    try {
+      isLoading.value = true;
+      var response = await http.post(
+        Uri.parse("$url/feeds"),
+        headers: {
+          'Accept': 'application',
+          'Authorization': 'Bearer ${box.read('token')}'
+        },
+        body: data
+      );
+
+      if (response.statusCode == 201) {
+        isLoading.value = false;
+        Get.snackbar(
+          'Success',
+          jsonDecode(response.body)['meta']['message'],
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white
+        );
+      } else if(response.statusCode == 422) {
+        isLoading.value = false;
+        Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        Map<String, List<String>> result = {};
+        Map<String, dynamic> errors = jsonResponse['result'];
+        errors.forEach((key, value) {
+          result[key] = List<String>.from(value);
+        });
+
+        return result;
       }
     } catch (e) {
       isLoading.value = false;

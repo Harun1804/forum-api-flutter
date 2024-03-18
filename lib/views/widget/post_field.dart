@@ -5,10 +5,12 @@ class PostField extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.controller,
+    this.errorText,
   });
 
   final String hintText;
   final TextEditingController controller;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class PostField extends StatelessWidget {
             horizontal: 20.0,
             vertical: 10.0,
           ),
+          errorText: errorText,
         ),
       ),
     );

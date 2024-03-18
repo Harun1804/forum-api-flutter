@@ -15,6 +15,9 @@ class HomePage extends StatefulWidget {
 class _HomeState extends State<HomePage> {
   final PostController _postController = Get.put(PostController());
   final TextEditingController _textEditController = TextEditingController();
+
+  String? _contentError;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
@@ -44,6 +47,7 @@ class _HomeState extends State<HomePage> {
               PostField(
                 hintText: "What's on your mind?",
                 controller: _textEditController,
+                errorText: _contentError,
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -57,14 +61,29 @@ class _HomeState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {},
-                child: Text('POST',
-                  style: GoogleFonts.poppins(
-                    fontSize: 11,
-                    textStyle: const TextStyle(
-                      color: Colors.white
-                    )
-                  ),
+                onPressed: () async {
+                  Map<String, List<String>>? errors = await _postController.createPost(content: _textEditController.text.trim());
+
+                  _textEditController.clear();
+                  _postController.getAllPosts();
+
+                  setState(() {
+                    _contentError = errors?['content']?.join(', ');
+                  });
+                },
+                child: Obx(() {
+                    return _postController.isLoading.value
+                        ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ) : Text('POST',
+                      style: GoogleFonts.poppins(
+                        fontSize: 11,
+                        textStyle: const TextStyle(
+                          color: Colors.white
+                        )
+                      ),
+                    );
+                  }
                 )
               ),
               const SizedBox(height: 20),
@@ -84,7 +103,7 @@ class _HomeState extends State<HomePage> {
                           }
                       );
                 }
-              )
+              ),
             ],
           ),
         ),

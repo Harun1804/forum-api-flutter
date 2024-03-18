@@ -30,9 +30,8 @@ class PostController extends GetxController
 
       if (response.statusCode == 200) {
         isLoading.value = false;
-        for (var item in jsonDecode(response.body)['result']) {
-          posts.value.add(Result.fromJson(item));
-        }
+        var jsonData = jsonDecode(response.body)['result'] as List;
+        posts.value = jsonData.map((e) => Result.fromJson(e)).toList();
       } else {
         isLoading.value = false;
         print(jsonDecode(response.body));

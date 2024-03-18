@@ -78,8 +78,8 @@ class _HomeState extends State<HomePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: _postController.posts.value.length,
                           itemBuilder: (context, index) {
-                            return const PostData(
-                              post: _postController.posts.value,
+                            return PostData(
+                              post: _postController.posts.value[index],
                             );
                           }
                       );

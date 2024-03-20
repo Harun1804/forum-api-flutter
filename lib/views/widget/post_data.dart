@@ -59,6 +59,7 @@ class PostData extends StatelessWidget {
                   onPressed: () {},
                   icon: const Icon(Icons.thumb_up)
               ),
+              Text(post.likesCount.toString()),
               IconButton(
                   onPressed: () {
                     Get.to(() => PostDetail(
@@ -67,6 +68,7 @@ class PostData extends StatelessWidget {
                   },
                   icon: const Icon(Icons.comment)
               ),
+              Text(post.commentsCount.toString())
             ],
           )
         ],

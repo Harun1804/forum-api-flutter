@@ -112,6 +112,37 @@ class PostController extends GetxController
     }
   }
 
+  Future likePost({ required postId }) async {
+    try {
+      posts.value.clear();
+      isLoading.value = true;
+      var response = await http.get(
+        Uri.parse("$url/feeds/$postId/like"),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${box.read('token')}'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        isLoading.value = false;
+        Get.snackbar(
+            'Success',
+            jsonDecode(response.body)['meta']['message'],
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.green,
+            colorText: Colors.white
+        );
+      } else {
+        isLoading.value = false;
+        print(jsonDecode(response.body));
+      }
+    } catch (e) {
+      isLoading.value = false;
+      print(e.toString());
+    }
+  }
+
   Future createComment({ required postId, required String body }) async {
     var data = {
       'body': body

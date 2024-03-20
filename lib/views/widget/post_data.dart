@@ -4,7 +4,9 @@ import 'package:forum_app/views/post_detail_page.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PostData extends StatelessWidget {
+import '../../controllers/post_controller.dart';
+
+class PostData extends StatefulWidget {
   const PostData({
     super.key,
     required this.post,
@@ -12,6 +14,12 @@ class PostData extends StatelessWidget {
 
   final Result post;
 
+  @override
+  State<PostData> createState() => _PostDataState();
+}
+
+class _PostDataState extends State<PostData> {
+  final PostController _postController = Get.put(PostController());
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +34,7 @@ class PostData extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(post.user!.name!,
+          Text(widget.post.user!.name!,
             style: GoogleFonts.poppins(
                 fontSize: 12,
                 textStyle: const TextStyle(
@@ -34,7 +42,7 @@ class PostData extends StatelessWidget {
                 )
             ),
           ),
-          Text(post.user!.email!,
+          Text(widget.post.user!.email!,
               style: GoogleFonts.poppins(
                   fontSize: 10,
                   textStyle: const TextStyle(
@@ -45,7 +53,7 @@ class PostData extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Text(post.content!,
+          Text(widget.post.content!,
               style: GoogleFonts.poppins(
                   fontSize: 10,
                   textStyle: const TextStyle(
@@ -56,19 +64,22 @@ class PostData extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.thumb_up)
+                  onPressed: () async {
+                    await _postController.likePost(postId: widget.post.id!);
+                    await _postController.getAllPosts();
+                  },
+                  icon: Icon(Icons.thumb_up)
               ),
-              Text(post.likesCount.toString()),
+              Text(widget.post.likesCount.toString()),
               IconButton(
                   onPressed: () {
                     Get.to(() => PostDetail(
-                      post: post,
+                      post: widget.post,
                     ));
                   },
                   icon: const Icon(Icons.comment)
               ),
-              Text(post.commentsCount.toString())
+              Text(widget.post.commentsCount.toString())
             ],
           )
         ],

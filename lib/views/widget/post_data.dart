@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forum_app/models/post_model.dart';
+import 'package:forum_app/views/post_detail_page.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PostData extends StatelessWidget {
@@ -58,7 +60,11 @@ class PostData extends StatelessWidget {
                   icon: const Icon(Icons.thumb_up)
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => PostDetail(
+                      post: post,
+                    ));
+                  },
                   icon: const Icon(Icons.comment)
               ),
             ],

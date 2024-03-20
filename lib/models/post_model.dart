@@ -57,6 +57,7 @@ class Result {
   int? likesCount;
   int? commentsCount;
   User? user;
+  List<User>? comments;
 
   Result({
     required this.id,
@@ -67,6 +68,7 @@ class Result {
     required this.likesCount,
     required this.commentsCount,
     required this.user,
+    required this.comments,
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
@@ -78,6 +80,7 @@ class Result {
     likesCount: json["likes_count"],
     commentsCount: json["comments_count"],
     user: User.fromJson(json["user"]),
+    comments: List<User>.from(json["comments"].map((x) => User.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -89,6 +92,7 @@ class Result {
     "likes_count": likesCount,
     "comments_count": commentsCount,
     "user": user!.toJson(),
+    "comments": List<dynamic>.from(comments!.map((x) => x.toJson())),
   };
 }
 
@@ -100,6 +104,7 @@ class User {
   dynamic emailVerifiedAt;
   DateTime? createdAt;
   DateTime? updatedAt;
+  Pivot? pivot;
 
   User({
     required this.id,
@@ -109,6 +114,7 @@ class User {
     required this.emailVerifiedAt,
     required this.createdAt,
     required this.updatedAt,
+    this.pivot,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -119,6 +125,7 @@ class User {
     emailVerifiedAt: json["email_verified_at"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
+    pivot: json["pivot"] == null ? null : Pivot.fromJson(json["pivot"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -129,5 +136,38 @@ class User {
     "email_verified_at": emailVerifiedAt,
     "created_at": createdAt!.toIso8601String(),
     "updated_at": updatedAt!.toIso8601String(),
+    "pivot": pivot?.toJson(),
+  };
+}
+
+class Pivot {
+  int feedId;
+  int userId;
+  String body;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  Pivot({
+    required this.feedId,
+    required this.userId,
+    required this.body,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
+    feedId: json["feed_id"],
+    userId: json["user_id"],
+    body: json["body"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "feed_id": feedId,
+    "user_id": userId,
+    "body": body,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
   };
 }
